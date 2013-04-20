@@ -20,6 +20,7 @@ import javax.swing.event.ListSelectionEvent;
  * @author alex
  */
 public abstract class State {
+    String price;
     String state;
     JLabel name;
     String servName;
@@ -28,6 +29,11 @@ public abstract class State {
     public String getState() {
         return state;
     }
+    
+    public String getPrice() {
+        return price;
+    }
+    
     public JLabel getUSer() {
         return name;
     }

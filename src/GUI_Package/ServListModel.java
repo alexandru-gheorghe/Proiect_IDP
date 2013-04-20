@@ -79,6 +79,8 @@ public abstract class ServListModel {
         sb.append("<html>");
         for(int i = 0; i < users.size(); i++) {
             sb.append(users.get(i).getState());
+            sb.append(";");
+            sb.append(users.get(i).getPrice());
             sb.append("<br>");
         }
         sb.append("</html>");

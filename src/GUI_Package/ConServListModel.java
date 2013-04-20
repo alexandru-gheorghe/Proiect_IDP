@@ -13,6 +13,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.event.ListSelectionEvent;
@@ -62,6 +63,8 @@ public class ConServListModel extends ServListModel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                String inputValue = JOptionPane.showInputDialog("Quantaty for offer request:");
+                
                 if(med.ConsActivateService(servName.getText()))
                     changeState(ServListModel.activState);
                     med.getGroupOfInt();                    

@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 
@@ -29,6 +30,8 @@ public class ConState extends State {
         this.servName = servList.servName.getText();
         this.name = new JLabel(name);
         this.state = ServListModel.noOffer;
+        this.price = "";
+        
     }
   
     @Override
@@ -54,6 +57,8 @@ public class ConState extends State {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                
+                
                 if(med.sendAcceptOffer(name.getText(), servName)) {
                     changeState(ServListModel.offerAccept);
                 }                    
