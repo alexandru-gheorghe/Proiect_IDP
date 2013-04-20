@@ -13,3 +13,4 @@ Pentru a rula simularea pentru Producator se inlocuieste fisierul config.txt cu 
 
 
 Merge!
+Merge 2
