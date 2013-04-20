@@ -4,7 +4,9 @@
  */
 package Server;
 
+import java.nio.channels.SelectionKey;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -13,8 +15,21 @@ import java.util.ArrayList;
 public class UserEntry {
     String userName;
     String type;
+    String password;
     ArrayList<String> services;
-    public UserEntry(String userName) {
+    HashMap<String, Integer> hashServices;
+    SelectionKey    sk;
+    public UserEntry(String userName, String type, String password, SelectionKey sk) {
         this.userName = new String(userName);
+        this.type = new String(type);
+        this.password = new String(password);
+        this.sk = sk;
+    }
+    boolean isOfInterest(String servName) {
+        for(int i = 0; i < services.size(); i++) {
+            if(services.get(i).compareTo(servName) == 0)
+                return true;
+        }        
+        return false;
     }
 }
