@@ -105,7 +105,7 @@ public class Server {
 			
 			serverSocketChannel = ServerSocketChannel.open();
 			serverSocketChannel.configureBlocking(false);
-			serverSocketChannel.socket().bind(new InetSocketAddress(IP, PORT));
+			serverSocketChannel.socket().bind(new InetSocketAddress(Constants.IP, Constants.PORT));
 			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 			
 			while (true) {
@@ -113,11 +113,15 @@ public class Server {
 				for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext(); ) {
 					SelectionKey key = it.next();
 					it.remove();
-					
-					if (key.isAcceptable())
-						accept(key);
-					else if (key.isReadable())
+                                        System.out.println("DDDD");
+					if (key.isAcceptable()) {
+                                            accept(key);
+                                        }
+					else if (key.isReadable()) {
 						read(key);
+                                                System.out.println("VVV");
+
+                                        }
 					else if (key.isWritable());
 //						write(key);
 				}

@@ -20,7 +20,7 @@ import Server.ParseMessage;
  */
 public class Network extends SwingWorker{
     Mediator med;
-    SelectionKey serverKey;
+    static SelectionKey serverKey;
     
     public Network(Mediator med) {
         this.med = med;
@@ -158,6 +158,7 @@ public class Network extends SwingWorker{
                         }
 
                         //socketChannel.close();
+                        serverKey = key;
                         key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
                         running = false;
                     }
@@ -168,17 +169,7 @@ public class Network extends SwingWorker{
         } catch (IOException e) {
             e.printStackTrace();
 
-        } finally {
-            if (selector != null)
-                try {
-                    selector.close();
-                } catch (IOException e) {}
-
-            if (socketChannel != null)
-                try {
-                    socketChannel.close();
-                } catch (IOException e) {}
-        }
+        } 
         
     }
 }

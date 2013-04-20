@@ -43,7 +43,7 @@ public class ParseMessage {
             bb.put(Constants.Start);
             bb.put(Constants.End);
         }
-        return null;
+        return bb;
     }
     
 }
