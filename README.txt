@@ -1,6 +1,7 @@
 Readme
 Gheorghe Alexandru 341C3
-Andrei Nica
+Nica Andrei 341C5
+Repository : https://github.com/alexandru-gheorghe/Proiect_IDP/ 
 
 Aplicatia se ruleaza cu ant run.
 
