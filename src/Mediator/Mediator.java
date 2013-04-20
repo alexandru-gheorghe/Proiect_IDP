@@ -32,6 +32,7 @@ public class Mediator {
     }
     public void registerServiceListModel(ServTableModel guiModel) {
         this.guiModel = guiModel;
+        System.err.print("DD");
     }
  
     public boolean login(String username, String password) {
