@@ -10,7 +10,7 @@ public class Server {
 	public static final int BUF_SIZE	= 4;
 	public static final String IP		= "127.0.0.1";
 	public static final int PORT		= 30000;
-	public HashMap<SelectionKey, UserEntry> userEntryMap;
+	public static HashMap<SelectionKey, UserEntry> userEntryMap;
 	public static void accept(SelectionKey key) throws IOException {
 		
 		System.out.print("ACCEPT: ");
@@ -18,7 +18,7 @@ public class Server {
 		ServerSocketChannel serverSocketChannel = (ServerSocketChannel)key.channel();
 		SocketChannel socketChannel = serverSocketChannel.accept();
 		socketChannel.configureBlocking(false);
-		ByteBuffer buf = ByteBuffer.allocateDirect(BUF_SIZE);
+		ByteBuffer buf = ByteBuffer.allocateDirect(Constants.BUF_SIZE);
 		socketChannel.register(key.selector(), SelectionKey.OP_READ, buf);
 		
 		System.out.println("Connection from: " + socketChannel.socket().getRemoteSocketAddress());
@@ -58,26 +58,26 @@ public class Server {
                 int type = Integer.parseInt(message.get(0));
                 message.remove(0);
                 if(type == Constants.LOGIN)
-                    login(message);
+                    login(key, message);
                 if(type == Constants.OFFREQEUEST)
-                    offerRequest(message);
+                    offerRequest(key, message);
                 if(type == Constants.OFFSERVICE)
-                    offerService(message);
+                    offerService(key, message);
                 if(type == Constants.CANCELREQ)
-                    cancelRequest(message);
+                    cancelRequest(key, message);
                 if(type == Constants.OFFACCEPT)
-                    offerAccept(message);
+                    offerAccept(key, message);
                 if(type == Constants.OFFEXCEED)
                     offerExceed(message);
                 if(type == Constants.OFFREFUSED)
                     offerRefused(message);
 	}
-	public static void write(SelectionKey key) throws IOException {
+	public static void write(SelectionKey key, ByteBuffer buf) throws IOException {
 		
 		System.out.println("WRITE: ");
 		
 		int bytes;
-		ByteBuffer buf = (ByteBuffer)key.attachment();		
+		//ByteBuffer buf = (ByteBuffer)key.attachment();		
 		SocketChannel socketChannel = (SocketChannel)key.channel();
 		
 		try {
@@ -118,8 +118,8 @@ public class Server {
 						accept(key);
 					else if (key.isReadable())
 						read(key);
-					else if (key.isWritable())
-						write(key);
+					else if (key.isWritable());
+//						write(key);
 				}
 			}
 			
@@ -140,19 +140,63 @@ public class Server {
 
     }
         
-    static void  login(ArrayList<String> message) {
-        
+    static void  login(SelectionKey key, ArrayList<String> message) {
+        String username = message.get(0);
+        String password = message.get(1);
+        String type = message.get(2);
+        UserEntry ue = new UserEntry(username, type, password, key);
+        userEntryMap.put(key, ue);
     }
-    static void offerRequest(ArrayList<String> message) {
-        
+    static void offerRequest(SelectionKey key, ArrayList<String> message) {
+       UserEntry ue = userEntryMap.get(key);
+       if(ue == null)
+           return;
+       String sn = message.get(0);
+       ue.services.add(sn);
+       notifyProd(Constants.OFFREQEUEST, ue.userName, sn);
     }
-    static void cancelRequest(ArrayList<String> message) {
-        
+    static void notifyProd(int type,String conName, String  serviceName) {
+        Iterator it = userEntryMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            UserEntry ue = (UserEntry)pairs.getValue();
+            if(ue.isOfInterest(serviceName))
+                sendMessage(type, conName, serviceName, ue);
+        }
     }
-    static void offerService(ArrayList<String> message) {
-        
+    static void sendMessage(int type, String conName, String servName, UserEntry ue) {
+        try {
+            ArrayList<String> message = new ArrayList<>();
+            message.add("" + type);
+            message.add(conName);
+            message.add(servName);
+            write(ue.sk, ParseMessage.constructMessage(message));
+        } catch(Exception e) {
+           e.printStackTrace(); 
+        }
+    } 
+    static void cancelRequest(SelectionKey key, ArrayList<String> message) {
+       UserEntry ue = userEntryMap.get(key);
+       if(ue == null)
+           return;
+       String sn = message.get(0);
+       ue.services.add(sn);
+       notifyProd(Constants.CANCELREQ, ue.userName, sn);  
     }
-    static void offerAccept(ArrayList<String> message) {
+    
+    static void offerService(SelectionKey key, ArrayList<String> message) {
+       UserEntry ue = userEntryMap.get(key);
+       if(ue == null)
+           return;
+       String sn = message.get(0);
+       ue.services.add(sn);
+       notifyProd(Constants.OFFSERVICE, ue.userName, sn);
+    }
+    static void offerAccept(SelectionKey key, ArrayList<String> message) {
+        UserEntry ue = userEntryMap.get(key);
+        if(ue == null)
+            return;
+        
         
     }
     static void offerExceed(ArrayList<String> message) {

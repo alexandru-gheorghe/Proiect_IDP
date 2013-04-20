@@ -19,5 +19,6 @@ public class Constants {
     public static final int  OFFACCEPT      =    5;
     public static final int  OFFEXCEED      =    6;
     public static final int  OFFREFUSED     =    7;
-    
+    public static final int  LOGINACCEPT    =    8;
+    public static final int  ADDCON         =    9;
 }

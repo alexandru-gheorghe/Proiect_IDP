@@ -23,7 +23,7 @@ public class ParseMessage {
        dest = new byte[index - 1];
        bb.get(dest, 0, index - 1);
        message.add(new String(dest));
-       for(int i = 0; i < 2; i++) {
+       while(true) {
             prevIndex = index + 2;
             index = index + 2;
             if(index >= bb.limit())
@@ -33,7 +33,7 @@ public class ParseMessage {
             dest = new byte[index - prevIndex];
             message.add(new String(dest));
        }
-       return message;
+       //return message;
     
     }
     public static ByteBuffer constructMessage(ArrayList<String> message) {
