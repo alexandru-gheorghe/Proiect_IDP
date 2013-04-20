@@ -5,6 +5,7 @@
 package Server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -14,7 +15,12 @@ public class UserEntry {
     String userName;
     String type;
     ArrayList<String> services;
+    HashMap<String, Integer> offers;
+    
     public UserEntry(String userName) {
         this.userName = new String(userName);
     }
+    
+    
+    
 }
