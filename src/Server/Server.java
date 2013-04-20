@@ -1,15 +1,16 @@
+package Server;
 import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
 import java.net.*;
 import java.util.*;
 
+
 public class Server {
-	
 	public static final int BUF_SIZE	= 4;
 	public static final String IP		= "127.0.0.1";
 	public static final int PORT		= 30000;
-	
+	public HashMap<SelectionKey, UserEntry> userEntryMap;
 	public static void accept(SelectionKey key) throws IOException {
 		
 		System.out.print("ACCEPT: ");
@@ -52,6 +53,7 @@ public class Server {
 			socketChannel.close();
 			
 		}
+                
 	}
 	
 	public static void write(SelectionKey key) throws IOException {
