@@ -10,3 +10,6 @@ Pentru a rula simularea pentru Consumator se inlocuieste fisierul config.txt cu 
 Pentru a  vedea rezultatele simularii ar trebui ca cateva servicii sa fie activate cu Launch Request
 
 Pentru a rula simularea pentru Producator se inlocuieste fisierul config.txt cu produc.txt.
+
+
+Merge!
