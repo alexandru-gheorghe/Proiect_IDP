@@ -35,8 +35,9 @@ public class Mediator {
         System.err.print("DD");
     }
  
-    public boolean login(String username, String password) {
-        return clt.login(username, password);
+    public boolean login(String username, String password, String typeName) {
+        return network.login(username, password, typeName);
+        //return clt.login(username, password);
     }
     public void startNetworkService() {
         network.startNetworkService();
