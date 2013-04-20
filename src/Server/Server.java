@@ -31,6 +31,7 @@ public class Server {
 		int bytes = 0;
 		ByteBuffer buf = (ByteBuffer)key.attachment();
                 buf = ByteBuffer.allocate(Constants.BUF_SIZE);
+                buf.clear();
 		SocketChannel socketChannel = (SocketChannel)key.channel();
 		
 		try {
@@ -50,10 +51,12 @@ public class Server {
 			}
 			
 		} catch (IOException e) {
+                        e.printStackTrace();
 			System.out.println("Connection closed: " + e.getMessage());
 			socketChannel.close();
 			
 		}
+                buf.flip();
                 ArrayList<String> message = ParseMessage.parseBytes(buf);
                 int type = Integer.parseInt(message.get(0));
                 message.remove(0);
@@ -96,7 +99,7 @@ public class Server {
 	}
 	
 	public static void main(String[] args) {
-		
+		userEntryMap = new HashMap<>();
 		ServerSocketChannel serverSocketChannel	= null;
 		Selector selector						= null;
 		

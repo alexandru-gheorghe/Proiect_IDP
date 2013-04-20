@@ -44,13 +44,12 @@ public class Network extends SwingWorker{
         }
         
         try {
-            bb = read();
+         bb = read();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        
-        message = ParseMessage.parseBytes(bb);
-        message.get(0).compareTo("8");
+       message = ParseMessage.parseBytes(bb);
+       message.get(0).compareTo("8");
         
         return true;
     }
@@ -89,7 +88,7 @@ public class Network extends SwingWorker{
         while (socketChannel.write(bb) > 0);
 
         if (! bb.hasRemaining()) {
-            socketChannel.close();
+            //socketChannel.close();
             
         }
     }
@@ -100,6 +99,7 @@ public class Network extends SwingWorker{
 
         int bytes = 0;
         ByteBuffer buf = ByteBuffer.allocateDirect(Constants.BUF_SIZE);
+        buf.clear();
         SocketChannel socketChannel = (SocketChannel)serverKey.channel();
 
         try {
@@ -122,7 +122,7 @@ public class Network extends SwingWorker{
             socketChannel.close();
 
         }
-        
+        buf.flip();
         return buf;
     }
     
