@@ -42,6 +42,7 @@ public class ParseMessage {
             bb.put(message.get(i).getBytes());
             bb.put(Constants.Start);
             bb.put(Constants.End);
+            
         }
         return bb;
     }
