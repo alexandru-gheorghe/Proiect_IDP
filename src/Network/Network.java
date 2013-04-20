@@ -6,6 +6,13 @@ package Network;
 
 import Mediator.Mediator;
 import javax.swing.SwingWorker;
+import java.io.*;
+import java.nio.*;
+import java.nio.channels.*;
+import java.net.*;
+import java.util.*;
+import Server.Constants;
+import Server.ParseMessage;
 
 /**
  *
@@ -13,13 +20,41 @@ import javax.swing.SwingWorker;
  */
 public class Network extends SwingWorker{
     Mediator med;
+    SelectionKey serverKey;
+    
     public Network(Mediator med) {
         this.med = med;
         med.registerNetwork(this);
     }
+    
     public boolean login(String username, String password, String typeName) {
+        connect();
+        
+        ArrayList<String> message = new ArrayList<String>();
+        message.add(Constants.LOGIN + "");
+        message.add(username);
+        message.add(password);
+        message.add(typeName);                           
+        ByteBuffer bb = ParseMessage.constructMessage(message);
+        
+        try {
+            write(bb);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        try {
+            bb = read();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        message = ParseMessage.parseBytes(bb);
+        message.get(0).compareTo("8");
+        
         return true;
     }
+    
     public void startNetworkService() {
         //this.execute();
     }
@@ -42,5 +77,108 @@ public class Network extends SwingWorker{
     }
     public void receiveFile() {
         this.execute();
+    }
+    
+    public void write(ByteBuffer bb) throws IOException {
+
+        System.out.println("WRITE: ");
+
+        
+        SocketChannel socketChannel = (SocketChannel)serverKey.channel();
+
+        while (socketChannel.write(bb) > 0);
+
+        if (! bb.hasRemaining()) {
+            socketChannel.close();
+            
+        }
+    }
+    
+    public ByteBuffer read() throws IOException {
+		
+        System.out.print("READ: ");
+
+        int bytes = 0;
+        ByteBuffer buf = ByteBuffer.allocateDirect(Constants.BUF_SIZE);
+        SocketChannel socketChannel = (SocketChannel)serverKey.channel();
+
+        try {
+            while ((bytes = socketChannel.read(buf)) > 0);
+
+            // check for EOF
+            if (bytes == -1)
+                throw new IOException("EOF");
+
+            // if buffer is full, write it back, flipping it first
+            if (! buf.hasRemaining()) {
+                buf.flip();
+
+                //Channels.newChannel(System.out).write(buf);
+                //buf.clear();
+            }
+
+        } catch (IOException e) {
+            System.out.println("Connection closed: " + e.getMessage());
+            socketChannel.close();
+
+        }
+        
+        return buf;
+    }
+    
+    public static void connect(){
+	Selector selector = null;
+        SocketChannel socketChannel = null;
+        boolean running = true;
+        
+        try {
+            selector = Selector.open();
+
+            socketChannel = SocketChannel.open();
+            socketChannel.configureBlocking(false);
+            socketChannel.connect(new InetSocketAddress(Constants.IP, Constants.PORT));
+
+
+            socketChannel.register(selector, SelectionKey.OP_CONNECT);
+
+            while (running) {
+                selector.select();
+
+                for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext(); ) {
+                    SelectionKey key = it.next();
+                    it.remove();
+
+                    if (key.isConnectable()) {
+                        
+                        System.out.print("CONNECT: ");
+
+                        if (! socketChannel.finishConnect()) {
+                            System.err.println("Eroare finishConnect");
+                            running = false;
+                        }
+
+                        //socketChannel.close();
+                        key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+                        running = false;
+                    }
+
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } finally {
+            if (selector != null)
+                try {
+                    selector.close();
+                } catch (IOException e) {}
+
+            if (socketChannel != null)
+                try {
+                    socketChannel.close();
+                } catch (IOException e) {}
+        }
+        
     }
 }

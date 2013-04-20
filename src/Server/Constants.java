@@ -9,6 +9,10 @@ package Server;
  * @author alex
  */
 public class Constants {
+   
+    public static final String IP		= "127.0.0.1";
+    public static final int PORT		= 30000;
+    
     public static final byte Start          =    127;
     public static final byte End            =    23;
     public static final int  BUF_SIZE       =    1024;
