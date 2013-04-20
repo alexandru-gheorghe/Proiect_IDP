@@ -17,6 +17,9 @@ public class Network extends SwingWorker{
         this.med = med;
         med.registerNetwork(this);
     }
+    public boolean login(String username, String password, String typeName) {
+        return true;
+    }
     public void startNetworkService() {
         //this.execute();
     }

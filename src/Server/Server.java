@@ -29,7 +29,8 @@ public class Server {
 		System.out.print("READ: ");
 		
 		int bytes = 0;
-		ByteBuffer buf = (ByteBuffer)key.attachment();		
+		ByteBuffer buf = (ByteBuffer)key.attachment();
+                buf = ByteBuffer.allocate(Constants.BUF_SIZE);
 		SocketChannel socketChannel = (SocketChannel)key.channel();
 		
 		try {
@@ -53,9 +54,24 @@ public class Server {
 			socketChannel.close();
 			
 		}
-                
+                ArrayList<String> message = ParseMessage.parseBytes(buf);
+                int type = Integer.parseInt(message.get(0));
+                message.remove(0);
+                if(type == Constants.LOGIN)
+                    login(message);
+                if(type == Constants.OFFREQEUEST)
+                    offerRequest(message);
+                if(type == Constants.OFFSERVICE)
+                    offerService(message);
+                if(type == Constants.CANCELREQ)
+                    cancelRequest(message);
+                if(type == Constants.OFFACCEPT)
+                    offerAccept(message);
+                if(type == Constants.OFFEXCEED)
+                    offerExceed(message);
+                if(type == Constants.OFFREFUSED)
+                    offerRefused(message);
 	}
-	
 	public static void write(SelectionKey key) throws IOException {
 		
 		System.out.println("WRITE: ");
@@ -94,7 +110,6 @@ public class Server {
 			
 			while (true) {
 				selector.select();
-				
 				for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext(); ) {
 					SelectionKey key = it.next();
 					it.remove();
@@ -123,6 +138,27 @@ public class Server {
 				} catch (IOException e) {}
 		}
 
-	}
-
+    }
+        
+    static void  login(ArrayList<String> message) {
+        
+    }
+    static void offerRequest(ArrayList<String> message) {
+        
+    }
+    static void cancelRequest(ArrayList<String> message) {
+        
+    }
+    static void offerService(ArrayList<String> message) {
+        
+    }
+    static void offerAccept(ArrayList<String> message) {
+        
+    }
+    static void offerExceed(ArrayList<String> message) {
+        
+    }
+    static void offerRefused(ArrayList<String> message) {
+        
+    }
 }

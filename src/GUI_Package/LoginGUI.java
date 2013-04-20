@@ -121,7 +121,7 @@ public class LoginGUI extends javax.swing.JFrame {
             else
                 clt = new MockProdWebService_Client(med);
             ServiceListGUI gui = new ServiceListGUI(med);
-            if(med.login(username, password)) {
+            if(med.login(username, password, typeName)) {
                 med.startNetworkService();
                 this.setVisible(false);
                 gui.setVisible(true);

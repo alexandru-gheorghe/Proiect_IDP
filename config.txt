@@ -1,7 +1,7 @@
-Consumator
-Cumpar1
-Cumpar2
-Cumpar3
-Cumpar4
-Cumpar5
-Cumpar6
+Producator
+Vand1
+Vand2
+Vand3
+Vand4
+Vand5
+Vand6
