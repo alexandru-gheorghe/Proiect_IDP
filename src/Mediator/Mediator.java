@@ -64,8 +64,8 @@ public class Mediator {
     public boolean sendDropOffer(String userName, String servName) {
         return clt.sendDropOffer(userName, servName);
     }
-    public ArrayList<String> sendOfferRequest(String userName, String servName) {
-        return this.network.sendOfferRequest(userName, servName);
+    public void sendOfferRequest(String userName, String servName) {
+        this.network.sendOfferRequest(userName, servName);
     }
     public boolean sendAcceptOffer(String userName, String servName) {
         return clt.sendAcceptOffer(userName, servName);

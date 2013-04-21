@@ -171,6 +171,7 @@ public class Server {
        String sn = message.get(0);
        ue.services.add(sn);
        ArrayList<String> reply = getGroup(sn, Constants.PROD);
+       reply.add(0, Constants.OFFSERVICE + "");
        write(key, ParseMessage.constructMessage(reply));
        notifyProd(Constants.OFFREQEUEST, ue.userName, sn, Constants.PROD);
     }

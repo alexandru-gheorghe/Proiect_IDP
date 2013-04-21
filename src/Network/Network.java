@@ -54,19 +54,20 @@ public class Network extends SwingWorker{
        return true;
     }
     
-     public ArrayList<String> sendOfferRequest(String userName, String servName) {
+     public void sendOfferRequest(String userName, String servName) {
          try {
              ArrayList<String> message = new ArrayList<>();
              message.add(Constants.OFFREQEUEST + "");
              message.add(servName);
              write(ParseMessage.constructMessage(message));
+             /*
              ByteBuffer bb = read();
              message = ParseMessage.parseBytes(bb);
              return message;
+             * */
          } catch(Exception e) {
              e.printStackTrace();
          }
-         return null;
      }
      public ArrayList<String> sendOfferService(String userName, String servName) {
          try {
@@ -84,21 +85,30 @@ public class Network extends SwingWorker{
      }
     
     public void startNetworkService() {
-        //this.execute();
+        this.execute();
     }
     @Override
     protected Object doInBackground()  {
-        int i = 0;
-        try {
-            Thread.sleep(5000);
-            for(i = 0 ; i < 100 ; i++) {
-                System.out.println("Alex");
+
+        while(true) {
+            try {
+                ByteBuffer bb = read();
+                ArrayList<String> message;
+                message = ParseMessage.parseBytes(bb);
+                int type = Integer.parseInt(message.remove(0));
+                if(type == Constants.OFFREQEUEST) {
+                    String servName = message.remove(0);
+                    med.addNewUsers(message, servName);
+                }
+                if(type == Constants.OFFSERVICE) {
+                    String servName = message.remove(0);
+                    med.addNewUsers(message, servName);
+                }
+                    
+            } catch(Exception e) {
+                e.printStackTrace();
             }
-        } catch(Exception e) {
-            e.printStackTrace();
         }
-            return null;
-            
     }
     public void sendFile() {
         this.execute();
