@@ -56,19 +56,20 @@ public class Network extends SwingWorker{
 
     }
     
-     public ArrayList<String> sendOfferRequest(String userName, String servName) {
+     public void sendOfferRequest(String userName, String servName) {
          try {
              ArrayList<String> message = new ArrayList<>();
              message.add(Constants.OFFREQEUEST + "");
              message.add(servName);
              write(ParseMessage.constructMessage(message));
+             /*
              ByteBuffer bb = read();
              message = ParseMessage.parseBytes(bb);
              return message;
+             * */
          } catch(Exception e) {
              e.printStackTrace();
          }
-         return null;
      }
      
      public ArrayList<String> sendOfferService(String userName, String servName) {
@@ -79,29 +80,59 @@ public class Network extends SwingWorker{
              write(ParseMessage.constructMessage(message));
              ByteBuffer bb = read();
              message = ParseMessage.parseBytes(bb);
+             if(message.size() > 0) {
+                 message.remove(0);
+                 message.remove(0);
+             }
              return message;
          } catch(Exception e) {
              e.printStackTrace();
          }
          return null;
      }
-    
-    public void startNetworkService() {
-        //this.execute();
-    }
-    @Override
-    protected Object doInBackground()  {
-        int i = 0;
+    public void sendDropRequest(String servName) {
         try {
-            Thread.sleep(5000);
-            for(i = 0 ; i < 100 ; i++) {
-                System.out.println("Alex");
-            }
+            ArrayList<String> message = new ArrayList<>();
+            message.add(Constants.DROPREQ + "");
+            message.add(servName);
+            write(ParseMessage.constructMessage(message));
         } catch(Exception e) {
             e.printStackTrace();
         }
-            return null;
-            
+   }
+    
+    public void startNetworkService() {
+        this.execute();
+    }
+    @Override
+    protected Object doInBackground()  {
+
+        while(true) {
+            try {
+                ByteBuffer bb = read();
+                ArrayList<String> message;
+                message = ParseMessage.parseBytes(bb);
+                System.out.println("Message = " + message);
+                if(message.size() <= 0)
+                    continue;
+                int type = Integer.parseInt(message.remove(0));
+                if(type == Constants.OFFREQEUEST) {
+                    String servName = message.remove(0);
+                    med.addNewUsers(message, servName);
+                }
+                if(type == Constants.OFFSERVICE) {
+                    String servName = message.remove(0);
+                    med.addNewUsers(message, servName);
+                }
+                if(type == Constants.DROPREQ) {
+                    String servName = message.remove(0);
+                    med.removeUsers(message, servName);
+                }
+                    
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
     public void sendFile() {
         this.execute();
