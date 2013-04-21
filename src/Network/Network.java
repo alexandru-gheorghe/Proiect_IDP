@@ -126,6 +126,18 @@ public class Network extends SwingWorker{
        }
        return true;
     }
+    public boolean sendRefuseOffer(String userName, String servName) {
+        try {
+          ArrayList<String> message = new ArrayList<>();
+          message.add(Constants.OFFREFUSED + "");
+          message.add(servName);
+          message.add(userName);
+          write(ParseMessage.constructMessage(message));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    } 
    public boolean sendDropOffer(String userName, String servName) {
        ArrayList<String> message = new ArrayList<>();
        message.add(Constants.OFFDROP + "");

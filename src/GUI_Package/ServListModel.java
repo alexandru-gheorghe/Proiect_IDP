@@ -128,10 +128,14 @@ public abstract class ServListModel {
     }
     
     boolean isAcceptOfferAvailable() {
+        if(this.users.size() <= 0)
+            return false;
         return (state.getText().compareTo(offerAccept) != 0 && 
                 state.getText().compareTo(inactivState)  != 0 );            
     } 
     boolean isRefuseOfferAvailable() {
+        if(this.users.size() <= 0)
+            return false;
         return (state.getText().compareTo(offerAccept) != 0 && 
                 state.getText().compareTo(inactivState)  != 0 );            
     }

@@ -80,7 +80,7 @@ public class Mediator {
         return network.sendAcceptOffer(userName, servName, quant);
     }
     public boolean sendRefuseOffer(String userName, String servName) {
-        return clt.sendRefuseOffer(userName, servName);
+        return network.sendRefuseOffer(userName, servName);
     } 
     public ArrayList<String> sendOfferService(String userName, String servName) {
         return network.sendOfferService(userName, servName);

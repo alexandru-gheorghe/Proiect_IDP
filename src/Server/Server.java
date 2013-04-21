@@ -71,7 +71,7 @@ public class Server {
                 if(type == Constants.OFFEXCEED)
                     offerExceed(message);
                 if(type == Constants.OFFREFUSED)
-                    offerRefused(message);
+                    offerRefused(key, message);
                 if(type == Constants.DROPREQ)
                     dropRequest(key, message);
                 if(type == Constants.OFFMAKE)
@@ -283,8 +283,9 @@ public class Server {
     static void offerExceed(ArrayList<String> message) {
         
     }
-    static void offerRefused(ArrayList<String> message) {
-        
+    static void offerRefused(SelectionKey key, ArrayList<String> message) throws Exception{
+        UserEntry ue = userEntryMap.get(key);
+        notifyUser(Constants.OFFREFUSED, message.get(1), message.get(0), ue.userName, "");
     }
 
     private static void makeOffer(SelectionKey key, ArrayList<String> message) throws Exception{
