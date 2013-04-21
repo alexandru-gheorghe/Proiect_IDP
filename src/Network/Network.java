@@ -21,7 +21,7 @@ import Server.ParseMessage;
 public class Network extends SwingWorker{
     Mediator med;
     static SelectionKey serverKey;
-    
+    static Selector selector;
     public Network(Mediator med) {
         this.med = med;
         med.registerNetwork(this);
@@ -50,8 +50,7 @@ public class Network extends SwingWorker{
         }
        message = ParseMessage.parseBytes(bb);
        message.get(0).compareTo("8");
-        
-        return true;
+       return true;
     }
     
     public void startNetworkService() {
@@ -101,7 +100,7 @@ public class Network extends SwingWorker{
         ByteBuffer buf = ByteBuffer.allocateDirect(Constants.BUF_SIZE);
         buf.clear();
         SocketChannel socketChannel = (SocketChannel)serverKey.channel();
-
+        selector.select();
         try {
             while ((bytes = socketChannel.read(buf)) > 0);
 
@@ -127,7 +126,7 @@ public class Network extends SwingWorker{
     }
     
     public static void connect(){
-	Selector selector = null;
+	selector = null;
         SocketChannel socketChannel = null;
         boolean running = true;
         
@@ -159,7 +158,8 @@ public class Network extends SwingWorker{
 
                         //socketChannel.close();
                         serverKey = key;
-                        key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+                        key.interestOps(SelectionKey.OP_READ);
+                        
                         running = false;
                     }
 

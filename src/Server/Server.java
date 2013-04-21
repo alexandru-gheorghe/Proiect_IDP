@@ -153,6 +153,14 @@ public class Server {
         String type = message.get(2);
         UserEntry ue = new UserEntry(username, type, password, key);
         userEntryMap.put(key, ue);
+        ArrayList<String> reply = new ArrayList<>();
+        reply.add(Constants.LOGINACCEPT + "");
+        try {
+            write(key, ParseMessage.constructMessage(reply));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
     }
     static void offerRequest(SelectionKey key, ArrayList<String> message) {
        UserEntry ue = userEntryMap.get(key);
