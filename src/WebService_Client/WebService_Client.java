@@ -60,7 +60,8 @@ public class WebService_Client extends SwingWorker {
        return true;
    }
    public boolean receiveMakeOffer(String userName, String servName) {
-       return med.receiveMakeOffer(userName, servName);
+       return true;
+       //       return med.receiveMakeOffer(userName, servName);
    }
    
    public boolean receiveDropOffer(String userName, String servName) {

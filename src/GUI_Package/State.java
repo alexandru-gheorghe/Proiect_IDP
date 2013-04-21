@@ -45,6 +45,13 @@ public abstract class State {
     public void changeState(String newState) {
         state = newState;
         servList.updateTable();
+        if(newState.compareTo(ServListModel.noOffer) == 0)
+            price = "";
+    }
+    public void changeState(String newState, String price) {
+        state = newState;
+        this.price = price;
+        servList.updateTable();
     }
     public boolean isSameUser(String username) {
         return this.name.getText().compareTo(username) == 0;

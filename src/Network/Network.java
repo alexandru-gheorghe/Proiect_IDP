@@ -102,7 +102,7 @@ public class Network extends SwingWorker{
              e.printStackTrace();
          }
          return null;
-     }
+    }
     public void sendDropRequest(String servName) {
         try {
             ArrayList<String> message = new ArrayList<>();
@@ -113,7 +113,18 @@ public class Network extends SwingWorker{
             e.printStackTrace();
         }
    }
-    
+   public boolean sendDropOffer(String userName, String servName) {
+       ArrayList<String> message = new ArrayList<>();
+       message.add(Constants.OFFDROP + "");
+       message.add(servName);
+       message.add(userName);
+       try {
+            write(ParseMessage.constructMessage(message));
+       } catch(Exception e) {
+           e.printStackTrace();
+       }
+       return true;
+   }
     public void startNetworkService() {
         this.execute();
     }
@@ -145,6 +156,17 @@ public class Network extends SwingWorker{
                     String servName = message.remove(0);
                     String userName = message.remove(0);
                     med.receiveOfferExceed(userName, servName);
+                }
+                if(type == Constants.OFFMAKE) {
+                    String servName = message.remove(0);
+                    String userName = message.remove(0);
+                    String price = message.remove(0);
+                    med.receiveMakeOffer(userName, servName, price);
+                }
+                if(type == Constants.OFFDROP) {
+                    String servName = message.remove(0);
+                    String userName = message.remove(0);
+                    med.receiveDropOffer(userName, servName);
                 }
                     
             } catch(Exception e) {

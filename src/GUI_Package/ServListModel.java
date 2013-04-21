@@ -187,7 +187,14 @@ public abstract class ServListModel {
             }
         }
     }
-    
+
+    void changeState(String userName, String state, String price) {
+        for(int i = 0; i < this.users.size(); i++) {
+            if(users.get(i).isSameUser(userName)) {
+                users.get(i).changeState(state, price);
+            }
+        }
+    }    
     abstract void addUser(String userName);
 }
 

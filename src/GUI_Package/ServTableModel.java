@@ -62,8 +62,8 @@ public class ServTableModel extends DefaultTableModel {
         updateTable();
         return true;
     }
-    public boolean receiveMakeOffer(String userName, String servName) {
-        changeState(userName, servName, ServListModel.offerMade);
+    public boolean receiveMakeOffer(String userName, String servName, String price) {
+        changeState(userName, servName, ServListModel.offerMade, price);
         return true;
     }
     
@@ -84,6 +84,14 @@ public class ServTableModel extends DefaultTableModel {
             if(serviceList.get(i).isSameService(servName) && 
                 serviceList.get(i).isActive())
                     serviceList.get(i).changeState(userName, state);
+        }
+        updateTable();
+     }
+     public void changeState(String userName, String servName, String state, String price) {
+        for(int i = 0; i < serviceList.size(); i++) {
+            if(serviceList.get(i).isSameService(servName) && 
+                serviceList.get(i).isActive())
+                    serviceList.get(i).changeState(userName, state, price);
         }
         updateTable();
      }

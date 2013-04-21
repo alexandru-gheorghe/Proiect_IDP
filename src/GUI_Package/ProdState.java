@@ -73,7 +73,7 @@ public class ProdState extends State {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(med.sendDropOffer(name.getText(), servName))
-                        ;
+                        changeState(ServListModel.noOffer);
                     }
         });
     }

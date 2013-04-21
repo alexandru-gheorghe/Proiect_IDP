@@ -4,12 +4,13 @@
  */
 package Server;
 import java.io.IOException;
-import org.apache.log4j.*;
+//import org.apache.log4j.*;
 
 /**
  *
  * @author Andrei
  */
+/*
 public class Logare {
     static Logger logger = Logger.getLogger(Logare.class); 
     
@@ -32,3 +33,4 @@ public class Logare {
     
     
 }
+*/

@@ -75,6 +75,8 @@ public class Server {
                     dropRequest(key, message);
                 if(type == Constants.OFFMAKE)
                     makeOffer(key, message);
+                if(type == Constants.OFFDROP)
+                    dropOffer(key, message);
 	}
 	public static void write(SelectionKey key, ByteBuffer buf) throws IOException {
 		
@@ -258,7 +260,7 @@ public class Server {
         
     }
 
-    private static void makeOffer(SelectionKey key, ArrayList<String> message) {
+    private static void makeOffer(SelectionKey key, ArrayList<String> message) throws Exception{
         UserEntry ue = userEntryMap.get(key);
         String sn = message.remove(0);
         String user = message.remove(0);
@@ -276,10 +278,13 @@ public class Server {
             }
         }
         System.out.println(servKey);
-        if(actUe == null) {
+        ue = userEntryMap.get(key);
+        if(actUe == null || actUe.userName.compareTo(ue.userName) == 0) {
             ue.setState(servKey, Constants.ACTSTATE);
+            notifyUser(Constants.OFFMAKE, user, sn, ue.userName, price + "");
             return;
         }
+        System.out.println("ue " + ue.userName + "actue = " + actUe.userName);
         if(ue.getOffer(servKey) < actUe.getOffer(servKey)) {
             ue.setState(servKey, Constants.EXSTATE);
             System.out.println("Offer to low");
@@ -293,6 +298,28 @@ public class Server {
             sendMessage(Constants.OFFEXCEED, user, sn, actUe);
 
         }
-        
+        notifyUser(Constants.OFFMAKE, user, sn, ue.userName, price + "");
+    }
+    public static void notifyUser(int action, String userName, String servName, String userProd, String price) throws Exception{
+        Iterator it = userEntryMap.entrySet().iterator();
+        System.out.println("Notify User" + userName + servName + price);
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            UserEntry   ue = (UserEntry)pairs.getValue();
+            if(ue.userName.compareTo(userName) == 0) {
+                ArrayList<String> message = new ArrayList<>();
+                message.add(action + "");
+                message.add(servName);
+                message.add(userProd);
+                message.add(price);
+                write(ue.sk, ParseMessage.constructMessage(message));
+                return;
+            }
+        }
+    }
+    public static void dropOffer(SelectionKey key, ArrayList<String> message) throws Exception{
+        UserEntry ue = userEntryMap.get(key);
+        ue.setState(message.get(0) + message.get(1), Constants.EXSTATE);
+        notifyUser(Constants.OFFDROP, message.get(1), message.get(0), ue.userName, "");
     }
 }

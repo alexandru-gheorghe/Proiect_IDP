@@ -68,7 +68,7 @@ public class Mediator {
         return network.sendMakeOffer(userName, servName, price);
     }
     public boolean sendDropOffer(String userName, String servName) {
-        return clt.sendDropOffer(userName, servName);
+        return network.sendDropOffer(userName, servName);
     }
     public void sendOfferRequest(String userName, String servName) {
         this.network.sendOfferRequest(userName, servName);
@@ -85,8 +85,8 @@ public class Mediator {
     public ArrayList<String> sendOfferService(String userName, String servName) {
         return network.sendOfferService(userName, servName);
     }
-    public boolean receiveMakeOffer(String userName, String servName) {
-       return guiModel.receiveMakeOffer(userName, servName);
+    public boolean receiveMakeOffer(String userName, String servName, String price) {
+       return guiModel.receiveMakeOffer(userName, servName, price);
     }
     public boolean receiveDropOffer(String userName, String servName) {
        return guiModel.receiveDropOffer(userName, servName);
