@@ -42,7 +42,7 @@ public class Network extends SwingWorker{
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        
+       
         try {
          bb = read();
         } catch (IOException ex) {
@@ -51,7 +51,9 @@ public class Network extends SwingWorker{
        message = ParseMessage.parseBytes(bb);
        System.out.println("Login reply " + message.get(0));
        message.get(0).compareTo("8");
-       return true;
+
+        return true;
+
     }
     
      public void sendOfferRequest(String userName, String servName) {
@@ -69,6 +71,7 @@ public class Network extends SwingWorker{
              e.printStackTrace();
          }
      }
+<<<<<<< HEAD
      public boolean sendMakeOffer(String userName, String servName, String price) {
          try {
              ArrayList<String> message = new ArrayList<>();
@@ -82,6 +85,9 @@ public class Network extends SwingWorker{
          }
          return true;
      }
+=======
+     
+>>>>>>> cf2376958e78ad2dbd23ad9649c946785d94977f
      public ArrayList<String> sendOfferService(String userName, String servName) {
          try {
              ArrayList<String> message = new ArrayList<>();
@@ -157,7 +163,9 @@ public class Network extends SwingWorker{
     }
     
     public void write(ByteBuffer bb) throws IOException {
-
+        
+        
+        
         System.out.println("WRITE: ");
 
         
@@ -172,7 +180,9 @@ public class Network extends SwingWorker{
     }
     
     public ByteBuffer read() throws IOException {
-		
+	
+      //  while (!serverKey.isReadable());
+        
         System.out.print("READ: ");
 
         int bytes = 0;
