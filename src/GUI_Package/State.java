@@ -47,6 +47,8 @@ public abstract class State {
         servList.updateTable();
         if(newState.compareTo(ServListModel.noOffer) == 0)
             price = "";
+        if(newState.compareTo(ServListModel.offerAccept) == 0)
+            servList.state.setText(newState);
     }
     public void changeState(String newState, String price) {
         state = newState;
