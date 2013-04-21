@@ -8,6 +8,7 @@ import java.util.*;
 
 public class Server {
 	public static HashMap<SelectionKey, UserEntry> userEntryMap;
+        public static HashMap<String, String>   accServiceMap;
 	public static void accept(SelectionKey key) throws IOException {
 		
 		System.out.print("ACCEPT: ");
@@ -103,6 +104,7 @@ public class Server {
 	
 	public static void main(String[] args) {
 		userEntryMap = new HashMap<>();
+                accServiceMap = new HashMap<>();
 		ServerSocketChannel serverSocketChannel	= null;
 		Selector selector						= null;
 		
@@ -239,11 +241,36 @@ public class Server {
        write(key, ParseMessage.constructMessage(reply));
        notifyProd(Constants.OFFSERVICE, ue.userName, sn, Constants.CON);
     }
-    static void offerAccept(SelectionKey key, ArrayList<String> message) {
+    static void offerAccept(SelectionKey key, ArrayList<String> message) throws Exception {
         UserEntry ue = userEntryMap.get(key);
         if(ue == null)
             return;
-        
+        UserEntry winUe;
+        String serviceName = message.get(0);
+        String winName = message.get(1);
+        String quant = message.get(2);
+        String clientType = Constants.PROD;
+        Iterator it = userEntryMap.entrySet().iterator();
+        if(accServiceMap.containsKey(ue.userName + serviceName)) {
+            sendMessage(Constants.INVALACC, "", "", ue);
+            return;
+        }
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            UserEntry ueIt = (UserEntry)pairs.getValue();
+            if(ueIt.userName.compareTo(winName) != 0 &&
+                ueIt.isOfInterest(serviceName) && ueIt.hasType(clientType))
+                sendMessage(Constants.OFFREFUSED, ue.userName, serviceName, ueIt);
+            if(ueIt.userName.compareTo(winName) == 0) {
+                ArrayList<String> reply = new ArrayList<>();
+                reply.add(Constants.OFFACCEPT + "");
+                reply.add(serviceName);
+                reply.add(ue.userName);
+                reply.add(quant);
+                write(ueIt.sk, ParseMessage.constructMessage(reply));
+            }
+        }
+        accServiceMap.put(ue.userName + serviceName, winName);
         
     }
     static void dropRequest(SelectionKey key, ArrayList<String> message) {

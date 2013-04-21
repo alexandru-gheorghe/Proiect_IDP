@@ -65,7 +65,7 @@ public class ConServListModel extends ServListModel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String inputValue = JOptionPane.showInputDialog("Quantaty for offer request:");
-                
+                quantity = inputValue;
                 if(med.ConsActivateService(servName.getText()))
                     changeState(ServListModel.activState);
                     med.sendOfferRequest(med.getUserName(), servName.getText());

@@ -42,6 +42,7 @@ public abstract class ServListModel {
     JLabel state;
     ServTableModel tableModel;
     JProgressBar progressBar;
+    String quantity;
     public String getUsers() {
         StringBuffer sb = new StringBuffer();
         sb.append("<html>");
@@ -196,5 +197,8 @@ public abstract class ServListModel {
         }
     }    
     abstract void addUser(String userName);
+    String getQuantity() {
+        return quantity;
+    }
 }
 

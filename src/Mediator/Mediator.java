@@ -76,8 +76,8 @@ public class Mediator {
     public void sendDropRequest(String servName) {
         this.network.sendDropRequest(servName);
     }
-    public boolean sendAcceptOffer(String userName, String servName) {
-        return clt.sendAcceptOffer(userName, servName);
+    public boolean sendAcceptOffer(String userName, String servName, String quant) {
+        return network.sendAcceptOffer(userName, servName, quant);
     }
     public boolean sendRefuseOffer(String userName, String servName) {
         return clt.sendRefuseOffer(userName, servName);
@@ -96,6 +96,14 @@ public class Mediator {
    }
    public boolean receiveCancelOffer(String userName, String servName) {
         return guiModel.receiveCancelOffer(userName, servName);
+   }
+   public boolean receiveOfferRefused(String userName, String servName) {
+       guiModel.receiveOfferRefused(userName, servName);
+       return true;
+   }
+   public boolean receiveOfferAccept(String userName, String servName, String quant) {
+       guiModel.receiveOfferAccept(userName, servName, quant);
+       return true;
    }
    public boolean receiveOfferExceed(String userName, String servName) {
        guiModel.changeState(userName, servName, ServListModel.offerExceeded);

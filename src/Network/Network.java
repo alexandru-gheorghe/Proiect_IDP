@@ -113,6 +113,19 @@ public class Network extends SwingWorker{
             e.printStackTrace();
         }
    }
+   public boolean sendAcceptOffer(String userName, String servName, String quant) {
+       try {
+          ArrayList<String> message = new ArrayList<>();
+          message.add(Constants.OFFACCEPT + "");
+          message.add(servName);
+          message.add(userName);
+          message.add(quant);
+          write(ParseMessage.constructMessage(message));
+       } catch(Exception e) {
+           e.printStackTrace();
+       }
+       return true;
+    }
    public boolean sendDropOffer(String userName, String servName) {
        ArrayList<String> message = new ArrayList<>();
        message.add(Constants.OFFDROP + "");
@@ -167,6 +180,17 @@ public class Network extends SwingWorker{
                     String servName = message.remove(0);
                     String userName = message.remove(0);
                     med.receiveDropOffer(userName, servName);
+                }
+                if(type == Constants.OFFREFUSED) {
+                    String servName = message.remove(0);
+                    String userName = message.remove(0);
+                    med.receiveOfferRefused(userName, servName);
+                }
+                if(type == Constants.OFFACCEPT) {
+                    String servName = message.remove(0);
+                    String userName = message.remove(0);
+                    String quant    = message.remove(0);
+                    med.receiveOfferAccept(userName, servName, quant);
                 }
                     
             } catch(Exception e) {

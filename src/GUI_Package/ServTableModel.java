@@ -79,6 +79,14 @@ public class ServTableModel extends DefaultTableModel {
        deleteUser(userName, servName);
        return true;
    }
+   public boolean receiveOfferRefused(String userName, String servName) {
+       changeState(userName, servName, ServListModel.offerRefused);
+       return true;
+   }
+   public boolean receiveOfferAccept(String userName, String servName, String quant) {
+       changeState(userName, servName, ServListModel.offerAccept);
+       return true;
+   }
      public void changeState(String userName, String servName, String state) {
         for(int i = 0; i < serviceList.size(); i++) {
             if(serviceList.get(i).isSameService(servName) && 

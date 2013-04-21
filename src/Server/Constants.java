@@ -32,4 +32,6 @@ public class Constants {
     public static final String CON          =    "Consumator";
     public static final int EXSTATE         =    14;
     public static final int ACTSTATE        =    15;
+    public static final int OFFACCOTHER     =    16;
+    public static final int INVALACC        =    17;
 }

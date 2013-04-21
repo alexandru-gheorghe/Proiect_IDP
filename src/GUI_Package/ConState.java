@@ -59,7 +59,7 @@ public class ConState extends State {
             public void actionPerformed(ActionEvent e) {
                 
                 
-                if(med.sendAcceptOffer(name.getText(), servName)) {
+                if(med.sendAcceptOffer(name.getText(), servName, servList.getQuantity())) {
                     changeState(ServListModel.offerAccept);
                 }                    
             }
