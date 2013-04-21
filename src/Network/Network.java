@@ -21,7 +21,7 @@ import Server.ParseMessage;
 public class Network extends SwingWorker{
     Mediator med;
     static SelectionKey serverKey;
-    
+    static Selector selector;
     public Network(Mediator med) {
         this.med = med;
         med.registerNetwork(this);
@@ -49,10 +49,44 @@ public class Network extends SwingWorker{
             ex.printStackTrace();
         }
        message = ParseMessage.parseBytes(bb);
+       System.out.println("Login reply " + message.get(0));
        message.get(0).compareTo("8");
+<<<<<<< HEAD
         */
         return true;
+=======
+       return true;
+>>>>>>> 797d78a65e6ddb4c74b15a838c7280405a16b8fa
     }
+    
+     public ArrayList<String> sendOfferRequest(String userName, String servName) {
+         try {
+             ArrayList<String> message = new ArrayList<>();
+             message.add(Constants.OFFREQEUEST + "");
+             message.add(servName);
+             write(ParseMessage.constructMessage(message));
+             ByteBuffer bb = read();
+             message = ParseMessage.parseBytes(bb);
+             return message;
+         } catch(Exception e) {
+             e.printStackTrace();
+         }
+         return null;
+     }
+     public ArrayList<String> sendOfferService(String userName, String servName) {
+         try {
+             ArrayList<String> message = new ArrayList<>();
+             message.add(Constants.OFFSERVICE + "");
+             message.add(servName);
+             write(ParseMessage.constructMessage(message));
+             ByteBuffer bb = read();
+             message = ParseMessage.parseBytes(bb);
+             return message;
+         } catch(Exception e) {
+             e.printStackTrace();
+         }
+         return null;
+     }
     
     public void startNetworkService() {
         //this.execute();
@@ -105,7 +139,7 @@ public class Network extends SwingWorker{
         ByteBuffer buf = ByteBuffer.allocateDirect(Constants.BUF_SIZE);
         buf.clear();
         SocketChannel socketChannel = (SocketChannel)serverKey.channel();
-
+        selector.select();
         try {
             while ((bytes = socketChannel.read(buf)) > 0);
 
@@ -131,7 +165,7 @@ public class Network extends SwingWorker{
     }
     
     public static void connect(){
-	Selector selector = null;
+	selector = null;
         SocketChannel socketChannel = null;
         boolean running = true;
         
@@ -163,7 +197,8 @@ public class Network extends SwingWorker{
 
                         //socketChannel.close();
                         serverKey = key;
-                        key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+                        key.interestOps(SelectionKey.OP_READ);
+                        
                         running = false;
                     }
 

@@ -4,6 +4,7 @@
  */
 package Server;
 
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ public class ParseMessage {
        prevIndex = 0;
        index = 0;
        while(index < dest.length) {
-           if(dest[index] == Constants.Start) {
+           if(dest[index] == Constants.Start && index > 0) {
                message.add(new String(dest, prevIndex, index - prevIndex));
                prevIndex = index+1;
            }
@@ -44,6 +45,8 @@ public class ParseMessage {
             bb.put(Constants.Start);
 
         }
+        if(message.size() == 0)
+            bb.put(Constants.Start);
         bb.flip();
         return bb;
     }

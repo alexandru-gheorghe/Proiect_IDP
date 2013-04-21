@@ -4,6 +4,7 @@ package GUI_Package;
 import Mediator.Mediator;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -29,15 +30,16 @@ public class ServiceListGUI extends javax.swing.JFrame {
     /**
      * Creates new form GUI
      */
-    public ServiceListGUI(Mediator med) {
+    public ServiceListGUI(Mediator med, String username, String password) {
+        this.username = new String(username);
         this.med = med;
         initComponents();
-        config();
+        //config();
         configTable();
     }
     void configTable() {
 
-        tableModel = new ServTableModel(med, jTable1);
+        tableModel = new ServTableModel(med, jTable1, username);
         
         jTable1.setModel(tableModel);
         jTable1.getColumnModel().getColumn(0).setCellRenderer(new ServTableCellRender());        
@@ -58,8 +60,9 @@ public class ServiceListGUI extends javax.swing.JFrame {
 
         try {
             
-            BufferedReader br = new BufferedReader(new FileReader("config.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(username));
             this.typeName = br.readLine();
+            jLabel1.setText(typeName);
             String line;
             while(true) {
                line = br.readLine();
@@ -68,6 +71,8 @@ public class ServiceListGUI extends javax.swing.JFrame {
                if(typeName.compareTo("Producator") == 0) {
                    ProdServListModel prod = new ProdServListModel(line, med);
                    tableModel.addRow(prod);
+                   ArrayList<String> message = med.sendOfferService(username, line);
+                   tableModel.addNewUsers(message, line);
                }
                else {
                    ConServListModel con = new ConServListModel(line, med);

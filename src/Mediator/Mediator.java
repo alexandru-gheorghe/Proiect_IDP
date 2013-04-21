@@ -24,6 +24,13 @@ public class Mediator {
         this.clt = null;
         this.guiModel = null;
     }
+    public String getUserName() {
+        return guiModel.getUserName();
+    }
+    public boolean addNewUsers(ArrayList<String> users, String servName) {
+        guiModel.addNewUsers(users, servName);
+        return true;
+    }
     public void registerNetwork(Network network) {
         this.network = network;
     }
@@ -37,7 +44,6 @@ public class Mediator {
  
     public boolean login(String username, String password, String typeName) {
         return network.login(username, password, typeName);
-        //return clt.login(username, password);
     }
     public void startNetworkService() {
         network.startNetworkService();
@@ -58,12 +64,18 @@ public class Mediator {
     public boolean sendDropOffer(String userName, String servName) {
         return clt.sendDropOffer(userName, servName);
     }
+    public ArrayList<String> sendOfferRequest(String userName, String servName) {
+        return this.network.sendOfferRequest(userName, servName);
+    }
     public boolean sendAcceptOffer(String userName, String servName) {
         return clt.sendAcceptOffer(userName, servName);
     }
     public boolean sendRefuseOffer(String userName, String servName) {
         return clt.sendRefuseOffer(userName, servName);
     } 
+    public ArrayList<String> sendOfferService(String userName, String servName) {
+        return network.sendOfferService(userName, servName);
+    }
     public boolean receiveMakeOffer(String userName, String servName) {
        return guiModel.receiveMakeOffer(userName, servName);
     }

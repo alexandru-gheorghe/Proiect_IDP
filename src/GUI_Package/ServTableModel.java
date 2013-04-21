@@ -20,9 +20,11 @@ public class ServTableModel extends DefaultTableModel {
     String colNames[] = {"Service", "User List", "Status", "Progress" };
     Mediator med;
     JTable table;
+    String username;
     ArrayList<ServListModel> serviceList;
-    public ServTableModel(Mediator med, JTable table) {
+    public ServTableModel(Mediator med, JTable table, String username) {
         super();
+        this.username = new String(username);
         this.table = table;
         this.setColumnIdentifiers(colNames);
         this.med = med;
@@ -96,6 +98,12 @@ public class ServTableModel extends DefaultTableModel {
         updateTable();
         return true;
     }
+    public boolean addNewUsers(ArrayList<String> users, String servName) {
+        for(int i = 0; i < users.size(); i++) 
+            this.addNewUser(users.get(i), servName);
+        updateTable();
+        return true;
+    }
     public void updateTable() {
         this.fireTableDataChanged();
     }
@@ -111,5 +119,8 @@ public class ServTableModel extends DefaultTableModel {
                 }
             }
         });        
+    }
+    public String getUserName() {
+        return username;
     }
 }
