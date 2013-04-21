@@ -73,6 +73,8 @@ public class Server {
                     offerRefused(message);
                 if(type == Constants.DROPREQ)
                     dropRequest(key, message);
+                if(type == Constants.OFFMAKE)
+                    makeOffer(key, message);
 	}
 	public static void write(SelectionKey key, ByteBuffer buf) throws IOException {
 		
@@ -253,6 +255,44 @@ public class Server {
         
     }
     static void offerRefused(ArrayList<String> message) {
+        
+    }
+
+    private static void makeOffer(SelectionKey key, ArrayList<String> message) {
+        UserEntry ue = userEntryMap.get(key);
+        String sn = message.remove(0);
+        String user = message.remove(0);
+        int price = Integer.parseInt(message.remove(0));
+        String servKey = user + sn;
+        ue.hashServices.put(servKey, price);
+        Iterator it = userEntryMap.entrySet().iterator();
+        int maxOffer = -1;
+        UserEntry actUe = null;
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            ue = (UserEntry)pairs.getValue();
+            if(ue.offActive(servKey)) {
+                actUe = ue;
+            }
+        }
+        System.out.println(servKey);
+        if(actUe == null) {
+            ue.setState(servKey, Constants.ACTSTATE);
+            return;
+        }
+        if(ue.getOffer(servKey) < actUe.getOffer(servKey)) {
+            ue.setState(servKey, Constants.EXSTATE);
+            System.out.println("Offer to low");
+            sendMessage(Constants.OFFEXCEED, user, sn, ue);
+            actUe.setState(servKey, Constants.ACTSTATE);
+            
+        } else {
+            System.out.println("Offer to high");
+            ue.setState(servKey, Constants.ACTSTATE);
+            actUe.setState(servKey, Constants.EXSTATE);
+            sendMessage(Constants.OFFEXCEED, user, sn, actUe);
+
+        }
         
     }
 }

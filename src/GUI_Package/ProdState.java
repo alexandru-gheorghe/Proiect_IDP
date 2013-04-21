@@ -62,7 +62,7 @@ public class ProdState extends State {
                 if (price == null)
                     price = "";
                 
-                if(med.sendMakeOffer(name.getText(), servName))
+                if(med.sendMakeOffer(name.getText(), servName, price))
                     changeState(ServListModel.offerMade);
             }
         });

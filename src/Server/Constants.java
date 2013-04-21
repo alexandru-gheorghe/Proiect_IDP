@@ -25,7 +25,10 @@ public class Constants {
     public static final int  OFFREFUSED     =    7;
     public static final int  LOGINACCEPT    =    8;
     public static final int  DROPREQ        =    9;
+    public static final int  OFFMAKE        =    10;
     public static final int  ADDCON         =    9;
     public static final String PROD         =    "Producator";
     public static final String CON          =    "Consumator";
+    public static final int EXSTATE         =    10;
+    public static final int ACTSTATE        =    11;
 }

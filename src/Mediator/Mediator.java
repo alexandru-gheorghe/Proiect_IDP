@@ -4,10 +4,12 @@
  */
 package Mediator;
 
+import GUI_Package.ProdState;
 import GUI_Package.ServListModel;
 import GUI_Package.ServTableModel;
 import GUI_Package.ServiceListGUI;
 import Network.Network;
+import Server.Constants;
 import WebService_Client.WebService_Client;
 import java.util.ArrayList;
 
@@ -62,8 +64,8 @@ public class Mediator {
         return this.clt.ConsDropRequestService(servName);
     }
     
-    public boolean sendMakeOffer(String userName, String servName) {
-        return clt.sendMakeOffer(userName, servName);
+    public boolean sendMakeOffer(String userName, String servName, String price) {
+        return network.sendMakeOffer(userName, servName, price);
     }
     public boolean sendDropOffer(String userName, String servName) {
         return clt.sendDropOffer(userName, servName);
@@ -94,6 +96,10 @@ public class Mediator {
    }
    public boolean receiveCancelOffer(String userName, String servName) {
         return guiModel.receiveCancelOffer(userName, servName);
+   }
+   public boolean receiveOfferExceed(String userName, String servName) {
+       guiModel.changeState(userName, servName, ServListModel.offerExceeded);
+       return true;
    }
     public boolean logout() {
         return clt.logout();

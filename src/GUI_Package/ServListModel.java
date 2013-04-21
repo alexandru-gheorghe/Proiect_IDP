@@ -23,17 +23,17 @@ import javax.swing.JProgressBar;
  */
 public abstract class ServListModel {
     DefaultListModel<State> users;
-    static final String activState = "Activ";
-    static final String noOffer = "No Offer";
-    static final String offerMade = "Offer Made";
-    static final String offerExceeded = "Offer Exceeded";
-    static final String inactivState = "Inactiv";
-    static final String offerAccept = "Offer Accepted";
-    static final String offerRefused = "Offer Refused";
-    static final String transferStarted = "Transfer started";
-    static final String transferProg  = "Transfer in progress";
-    static final String transferComp = "Transfer Completed";
-    static final String transferFail = "Transfer Failed";
+    public static final String activState = "Activ";
+    public static final String noOffer = "No Offer";
+    public static final String offerMade = "Offer Made";
+    public static final String offerExceeded = "Offer Exceeded";
+    public static final String inactivState = "Inactiv";
+    public static final String offerAccept = "Offer Accepted";
+    public static final String offerRefused = "Offer Refused";
+    public static final String transferStarted = "Transfer started";
+    public static final String transferProg  = "Transfer in progress";
+    public static final String transferComp = "Transfer Completed";
+    public static final String transferFail = "Transfer Failed";
     static final int MIN =  0;
     static final int MAX = 10;
     Mediator med;

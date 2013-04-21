@@ -79,12 +79,13 @@ public class ServTableModel extends DefaultTableModel {
        deleteUser(userName, servName);
        return true;
    }
-     void changeState(String userName, String servName, String state) {
+     public void changeState(String userName, String servName, String state) {
         for(int i = 0; i < serviceList.size(); i++) {
             if(serviceList.get(i).isSameService(servName) && 
                 serviceList.get(i).isActive())
                     serviceList.get(i).changeState(userName, state);
         }
+        updateTable();
      }
    
     public boolean addNewUser(String userName, ArrayList<String> servNames) {
