@@ -4,6 +4,7 @@
  */
 package Network;
 
+import Mediator.Mediator;
 import Server.Constants;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -33,12 +34,18 @@ public class FileTransferer extends SwingWorker{
     SocketChannel socketChannel;
     String ipaddr;
     int port;
+    int quant;
     String fileName;
-    FileTransferer(String ipaddr, int port, int type, String fileName) {
+    String servName;
+    Mediator med;
+    public FileTransferer(String servName, Mediator med, String ipaddr, int port, int type, String fileName, int quant) {
         this.type = type;
         this.ipaddr = ipaddr;
         this.port =  port;
         this.fileName = fileName;
+        this.quant = quant;
+        this.servName = servName;
+        this.med = med;
     }
     @Override
     protected Object doInBackground() throws Exception {
@@ -62,8 +69,7 @@ public class FileTransferer extends SwingWorker{
 
             socketChannel = SocketChannel.open();
             socketChannel.configureBlocking(false);
-            socketChannel.connect(new InetSocketAddress(Constants.IP, Constants.PORT));
-
+            socketChannel.connect(new InetSocketAddress(ipaddr, port));
 
             socketChannel.register(selector, SelectionKey.OP_CONNECT);
 
@@ -107,7 +113,7 @@ public class FileTransferer extends SwingWorker{
 			serverSocketChannel.configureBlocking(false);
 			serverSocketChannel.socket().bind(new InetSocketAddress(this.ipaddr, this.port));
 			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-			
+			System.out.println("JUST SELECT");
 		
                         selector.select();
 			
@@ -129,13 +135,21 @@ public class FileTransferer extends SwingWorker{
             ReadableByteChannel rbc = Channels.newChannel(new FileInputStream(fileName));
             ByteBuffer bb = ByteBuffer.allocate(5);
             bb.clear();
-            while(rbc.read(bb) > 0) {
+            int totalBytes = 0;
+            int bytes;
+            while((bytes = rbc.read(bb)) > 0) {
                 bb.flip();
+                totalBytes += bytes;
                 this.socketChannel.write(bb);
+                if(totalBytes >= quant)
+                    break;
                 bb.clear();
+                Thread.sleep(500);
+                med.updateProgress(servName, totalBytes);
             }
+            System.out.println("Write == " + totalBytes);
             rbc.close();
-            socketChannel.close();
+            //socketChannel.close();
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -146,11 +160,24 @@ public class FileTransferer extends SwingWorker{
             WritableByteChannel rbc = Channels.newChannel(new FileOutputStream(fileName));
             ByteBuffer bb = ByteBuffer.allocate(5);
             bb.clear();
-            while(this.socketChannel.read(bb) > 0) {
+            int totalBytes = 0;
+            int bytes;
+         
+            while((bytes = this.socketChannel.read(bb)) >= 0) {
+                
                 bb.flip();
-                rbc.write(bb);
+                if(bytes > 0)
+                    rbc.write(bb);
+                totalBytes += bytes;
+                if(totalBytes >= quant)
+                    break;
                 bb.clear();
+                if(bytes > 0) {
+                    Thread.sleep(500);
+                    med.updateProgress(servName, totalBytes);
+                }
             }
+            System.out.println("Read == " + totalBytes);
             rbc.close();
             socketChannel.close();
             serverSocketChannel.close();

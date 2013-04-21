@@ -249,6 +249,7 @@ public class Server {
         String serviceName = message.get(0);
         String winName = message.get(1);
         String quant = message.get(2);
+        String port = message.get(3);
         String clientType = Constants.PROD;
         Iterator it = userEntryMap.entrySet().iterator();
         if(accServiceMap.containsKey(ue.userName + serviceName)) {
@@ -267,6 +268,7 @@ public class Server {
                 reply.add(serviceName);
                 reply.add(ue.userName);
                 reply.add(quant);
+                reply.add(port);
                 write(ueIt.sk, ParseMessage.constructMessage(reply));
             }
         }

@@ -120,6 +120,10 @@ public class Network extends SwingWorker{
           message.add(servName);
           message.add(userName);
           message.add(quant);
+          int port = Math.abs(new Random().nextInt()) % 10000 + Constants.PORT + 1;
+          message.add(port + "");
+          FileTransferer ft = new FileTransferer(servName, med, Constants.IP, port, Constants.WRITEOP, servName + "_con", Integer.parseInt(quant));
+          ft.execute();
           write(ParseMessage.constructMessage(message));
        } catch(Exception e) {
            e.printStackTrace();
@@ -202,7 +206,8 @@ public class Network extends SwingWorker{
                     String servName = message.remove(0);
                     String userName = message.remove(0);
                     String quant    = message.remove(0);
-                    med.receiveOfferAccept(userName, servName, quant);
+                    int port        = Integer.parseInt(message.remove(0));
+                    med.receiveOfferAccept(userName, servName, quant, port);
                 }
                     
             } catch(Exception e) {

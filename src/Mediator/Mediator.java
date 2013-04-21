@@ -101,8 +101,8 @@ public class Mediator {
        guiModel.receiveOfferRefused(userName, servName);
        return true;
    }
-   public boolean receiveOfferAccept(String userName, String servName, String quant) {
-       guiModel.receiveOfferAccept(userName, servName, quant);
+   public boolean receiveOfferAccept(String userName, String servName, String quant, int port) {
+       guiModel.receiveOfferAccept(userName, servName, quant, port);
        return true;
    }
    public boolean receiveOfferExceed(String userName, String servName) {
@@ -125,7 +125,9 @@ public class Mediator {
     public void startWebServiceListener() {
         clt.startWebServiceListener();
     }
-    
+    public void updateProgress(String servName, int progress) {
+        guiModel.updateProgress(servName, progress);
+    }
 
     
 }

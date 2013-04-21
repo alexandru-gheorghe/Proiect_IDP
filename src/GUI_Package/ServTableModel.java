@@ -5,6 +5,8 @@
 package GUI_Package;
 
 import Mediator.Mediator;
+import Network.FileTransferer;
+import Server.Constants;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JTable;
@@ -83,9 +85,23 @@ public class ServTableModel extends DefaultTableModel {
        changeState(userName, servName, ServListModel.offerRefused);
        return true;
    }
-   public boolean receiveOfferAccept(String userName, String servName, String quant) {
+   public boolean receiveOfferAccept(String userName, String servName, String quant, int port) {
        changeState(userName, servName, ServListModel.offerAccept);
+       setProgress(servName, Integer.parseInt(quant));
+       FileTransferer ft = new FileTransferer(servName, med, Constants.IP, port, Constants.READOP, servName+"_prod", Integer.parseInt(quant));
+       ft.execute();
        return true;
+   }
+   public void setProgress(String servName, int quant) {
+       for(int i = 0; i < serviceList.size(); i++)
+           if(serviceList.get(i).isSameService(servName))
+               serviceList.get(i).progressBar.setMaximum(quant);
+   }
+   public void updateProgress(String servName, int progress) {
+       for(int i = 0; i < serviceList.size(); i++)
+           if(serviceList.get(i).isSameService(servName))
+               serviceList.get(i).progressBar.setValue(progress);
+       updateTable();
    }
      public void changeState(String userName, String servName, String state) {
         for(int i = 0; i < serviceList.size(); i++) {
