@@ -71,7 +71,6 @@ public class Network extends SwingWorker{
              e.printStackTrace();
          }
      }
-<<<<<<< HEAD
      public boolean sendMakeOffer(String userName, String servName, String price) {
          try {
              ArrayList<String> message = new ArrayList<>();
@@ -85,9 +84,7 @@ public class Network extends SwingWorker{
          }
          return true;
      }
-=======
-     
->>>>>>> cf2376958e78ad2dbd23ad9649c946785d94977f
+
      public ArrayList<String> sendOfferService(String userName, String servName) {
          try {
              ArrayList<String> message = new ArrayList<>();
