@@ -129,18 +129,22 @@ public class Server {
 			
 		} catch (Exception e) {
                         System.out.println("IOException");
-			//e.printStackTrace();
+			e.printStackTrace();
 			
 		} finally {
 			if (selector != null)
 				try {
 					selector.close();
-				} catch (IOException e) {}
+				} catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 			
 			if (serverSocketChannel != null)
 				try {
 					serverSocketChannel.close();
-				} catch (IOException e) {}
+				} catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 		}
 
     }

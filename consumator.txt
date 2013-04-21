@@ -1,7 +1,5 @@
 Consumator
-Cumpar1
-Cumpar2
-Cumpar3
-Cumpar4
-Cumpar5
-Cumpar6
+Ciment
+PC
+Telefoane
+Roti

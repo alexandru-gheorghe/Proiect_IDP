@@ -112,16 +112,16 @@ public class LoginGUI extends javax.swing.JFrame {
         Mediator med = new Mediator();
         Network network = new Network(med);
         try {
-            BufferedReader br = new BufferedReader(new FileReader("config.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(username));
             String typeName = br.readLine();
             
-            WebService_Client clt;
-            if(typeName.compareTo("Consumator") == 0)
-                clt = new MockConsWebService_Client(med);
-            else
-                clt = new MockProdWebService_Client(med);
-            ServiceListGUI gui = new ServiceListGUI(med);
+            WebService_Client clt = new WebService_Client(med);
+            //if(typeName.compareTo("Consumator") == 0)
+               ; //clt = new MockConsWebService_Client(med);
+            //else ;
+                //clt = new MockProdWebService_Client(med);
             if(med.login(username, password, typeName)) {
+                ServiceListGUI gui = new ServiceListGUI(med, username, password);
                 med.startNetworkService();
                 this.setVisible(false);
                 gui.setVisible(true);

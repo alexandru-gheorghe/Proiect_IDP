@@ -24,6 +24,8 @@ public class UserEntry {
         this.type = new String(type);
         this.password = new String(password);
         this.sk = sk;
+        this.services = new ArrayList<>();
+        hashServices  = new HashMap<>();
     }
     boolean isOfInterest(String servName) {
         for(int i = 0; i < services.size(); i++) {

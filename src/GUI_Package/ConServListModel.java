@@ -67,7 +67,9 @@ public class ConServListModel extends ServListModel {
                 
                 if(med.ConsActivateService(servName.getText()))
                     changeState(ServListModel.activState);
-                    med.getGroupOfInt();                    
+                    ArrayList<String> reply = med.sendOfferRequest(med.getUserName(), servName.getText());
+                    med.addNewUsers(reply, servName.getText());
+                    
              }
         });
     }
