@@ -24,7 +24,7 @@ public class Server {
 		System.out.println("Connection from: " + socketChannel.socket().getRemoteSocketAddress());
 	}
 	
-	public static void read(SelectionKey key) throws IOException {
+	public static void read(SelectionKey key) throws Exception {
 		
 		System.out.print("READ: ");
 		
@@ -130,8 +130,9 @@ public class Server {
 				}
 			}
 			
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+                        System.out.println("IOException");
+			//e.printStackTrace();
 			
 		} finally {
 			if (selector != null)
@@ -162,13 +163,26 @@ public class Server {
         }
         
     }
-    static void offerRequest(SelectionKey key, ArrayList<String> message) {
+    static void offerRequest(SelectionKey key, ArrayList<String> message) throws Exception {
        UserEntry ue = userEntryMap.get(key);
        if(ue == null)
            return;
        String sn = message.get(0);
        ue.services.add(sn);
+       ArrayList<String> reply = getProd(sn);
+       write(key, ParseMessage.constructMessage(reply));
        notifyProd(Constants.OFFREQEUEST, ue.userName, sn);
+    }
+    static ArrayList<String> getProd(String serviceName) {
+        Iterator it = userEntryMap.entrySet().iterator();
+        ArrayList<String> prodList = new ArrayList<>();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            UserEntry ue = (UserEntry)pairs.getValue();
+            if(ue.isOfInterest(serviceName) && ue.isProd())
+                prodList.add(ue.userName);
+        }
+        return prodList;
     }
     static void notifyProd(int type,String conName, String  serviceName) {
         Iterator it = userEntryMap.entrySet().iterator();

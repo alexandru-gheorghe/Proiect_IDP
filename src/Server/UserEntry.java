@@ -32,4 +32,7 @@ public class UserEntry {
         }        
         return false;
     }
+    boolean isProd() {
+        return (type.compareTo(Constants.PROD) == 0);
+    }
 }

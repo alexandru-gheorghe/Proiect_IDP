@@ -37,7 +37,6 @@ public class Mediator {
  
     public boolean login(String username, String password, String typeName) {
         return network.login(username, password, typeName);
-        //return clt.login(username, password);
     }
     public void startNetworkService() {
         network.startNetworkService();
@@ -57,6 +56,9 @@ public class Mediator {
     }
     public boolean sendDropOffer(String userName, String servName) {
         return clt.sendDropOffer(userName, servName);
+    }
+    public ArrayList<String> sendOfferRequest(String userName, String servName) {
+        return this.network.sendOfferRequest(userName, servName);
     }
     public boolean sendAcceptOffer(String userName, String servName) {
         return clt.sendAcceptOffer(userName, servName);

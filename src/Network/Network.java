@@ -49,9 +49,25 @@ public class Network extends SwingWorker{
             ex.printStackTrace();
         }
        message = ParseMessage.parseBytes(bb);
+       System.out.println("Login reply " + message.get(0));
        message.get(0).compareTo("8");
        return true;
     }
+    
+     public ArrayList<String> sendOfferRequest(String userName, String servName) {
+         try {
+             ArrayList<String> message = new ArrayList<>();
+             message.add(Constants.OFFREQEUEST + "");
+             message.add(servName);
+             write(ParseMessage.constructMessage(message));
+             ByteBuffer bb = read();
+             message = ParseMessage.parseBytes(bb);
+             return message;
+         } catch(Exception e) {
+             e.printStackTrace();
+         }
+         return null;
+     }
     
     public void startNetworkService() {
         //this.execute();
