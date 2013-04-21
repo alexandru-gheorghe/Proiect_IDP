@@ -104,6 +104,12 @@ public class ServTableModel extends DefaultTableModel {
         updateTable();
         return true;
     }
+    public boolean removeUsers(ArrayList<String> users, String servName) {
+        for(int i = 0; i < users.size(); i++) 
+            this.deleteUser(users.get(i), servName);
+        updateTable();
+        return true;
+    }
     public void updateTable() {
         this.fireTableDataChanged();
     }

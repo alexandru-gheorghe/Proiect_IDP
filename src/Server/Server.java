@@ -71,6 +71,8 @@ public class Server {
                     offerExceed(message);
                 if(type == Constants.OFFREFUSED)
                     offerRefused(message);
+                if(type == Constants.DROPREQ)
+                    dropRequest(key, message);
 	}
 	public static void write(SelectionKey key, ByteBuffer buf) throws IOException {
 		
@@ -171,7 +173,10 @@ public class Server {
        String sn = message.get(0);
        ue.services.add(sn);
        ArrayList<String> reply = getGroup(sn, Constants.PROD);
-       reply.add(0, Constants.OFFSERVICE + "");
+       if(reply.size() > 0) {
+            reply.add(0, Constants.OFFSERVICE + "");
+            reply.add(1, sn);
+       }
        write(key, ParseMessage.constructMessage(reply));
        notifyProd(Constants.OFFREQEUEST, ue.userName, sn, Constants.PROD);
     }
@@ -184,6 +189,7 @@ public class Server {
             if(ue.isOfInterest(serviceName) && ue.hasType(clientType))
                 prodList.add(ue.userName);
         }
+        
         return prodList;
     }
     static void notifyProd(int type, String conName, String  serviceName, String clientType) {
@@ -199,8 +205,8 @@ public class Server {
         try {
             ArrayList<String> message = new ArrayList<>();
             message.add("" + type);
-            message.add(conName);
             message.add(servName);
+            message.add(conName);
             write(ue.sk, ParseMessage.constructMessage(message));
         } catch(Exception e) {
            e.printStackTrace(); 
@@ -222,6 +228,10 @@ public class Server {
        String sn = message.get(0);
        ue.services.add(sn);
        ArrayList<String> reply = getGroup(sn, Constants.CON);
+       if(reply.size() > 0) {
+            reply.add(0, Constants.OFFREQEUEST + "");
+            reply.add(1, sn);
+       }
        write(key, ParseMessage.constructMessage(reply));
        notifyProd(Constants.OFFSERVICE, ue.userName, sn, Constants.CON);
     }
@@ -231,6 +241,13 @@ public class Server {
             return;
         
         
+    }
+    static void dropRequest(SelectionKey key, ArrayList<String> message) {
+        UserEntry ue = userEntryMap.get(key);
+        if(ue == null)
+            return;
+        String sn = message.get(0);
+        notifyProd(Constants.DROPREQ, ue.userName, sn, Constants.PROD);
     }
     static void offerExceed(ArrayList<String> message) {
         

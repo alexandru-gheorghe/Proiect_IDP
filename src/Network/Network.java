@@ -77,12 +77,26 @@ public class Network extends SwingWorker{
              write(ParseMessage.constructMessage(message));
              ByteBuffer bb = read();
              message = ParseMessage.parseBytes(bb);
+             if(message.size() > 0) {
+                 message.remove(0);
+                 message.remove(0);
+             }
              return message;
          } catch(Exception e) {
              e.printStackTrace();
          }
          return null;
      }
+    public void sendDropRequest(String servName) {
+        try {
+            ArrayList<String> message = new ArrayList<>();
+            message.add(Constants.DROPREQ + "");
+            message.add(servName);
+            write(ParseMessage.constructMessage(message));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+   }
     
     public void startNetworkService() {
         this.execute();
@@ -95,6 +109,9 @@ public class Network extends SwingWorker{
                 ByteBuffer bb = read();
                 ArrayList<String> message;
                 message = ParseMessage.parseBytes(bb);
+                System.out.println("Message = " + message);
+                if(message.size() <= 0)
+                    continue;
                 int type = Integer.parseInt(message.remove(0));
                 if(type == Constants.OFFREQEUEST) {
                     String servName = message.remove(0);
@@ -103,6 +120,10 @@ public class Network extends SwingWorker{
                 if(type == Constants.OFFSERVICE) {
                     String servName = message.remove(0);
                     med.addNewUsers(message, servName);
+                }
+                if(type == Constants.DROPREQ) {
+                    String servName = message.remove(0);
+                    med.removeUsers(message, servName);
                 }
                     
             } catch(Exception e) {

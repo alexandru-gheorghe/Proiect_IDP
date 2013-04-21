@@ -31,6 +31,10 @@ public class Mediator {
         guiModel.addNewUsers(users, servName);
         return true;
     }
+    public boolean removeUsers(ArrayList<String> users, String servName) {
+        guiModel.removeUsers(users, servName);
+        return true;
+    }
     public void registerNetwork(Network network) {
         this.network = network;
     }
@@ -66,6 +70,9 @@ public class Mediator {
     }
     public void sendOfferRequest(String userName, String servName) {
         this.network.sendOfferRequest(userName, servName);
+    }
+    public void sendDropRequest(String servName) {
+        this.network.sendDropRequest(servName);
     }
     public boolean sendAcceptOffer(String userName, String servName) {
         return clt.sendAcceptOffer(userName, servName);

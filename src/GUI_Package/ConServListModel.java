@@ -2,6 +2,7 @@ package GUI_Package;
 
 
 import Mediator.Mediator;
+import com.sun.nio.sctp.SendFailedNotification;
 import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,7 +68,7 @@ public class ConServListModel extends ServListModel {
                 
                 if(med.ConsActivateService(servName.getText()))
                     changeState(ServListModel.activState);
-                    //ArrayList<String> reply = med.sendOfferRequest(med.getUserName(), servName.getText());
+                    med.sendOfferRequest(med.getUserName(), servName.getText());
                     //med.addNewUsers(reply, servName.getText());
                     
              }
@@ -80,6 +81,8 @@ public class ConServListModel extends ServListModel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(med.ConsDropRequestService(servName.getText()))
+                        med.sendDropRequest(servName.getText());
+                        flush();
                         changeState(ServListModel.inactivState);
               }
         });

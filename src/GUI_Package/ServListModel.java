@@ -108,6 +108,10 @@ public abstract class ServListModel {
         state.setText(newState);
         med.updateTable();
     }
+    void flush() {
+        this.users.clear();
+        med.updateTable();
+    }
    public boolean isActive() {
        return state.getText().compareTo(inactivState) != 0;
    } 
