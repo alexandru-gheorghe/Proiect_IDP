@@ -42,7 +42,7 @@ public class Network extends SwingWorker{
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        
+        /*
         try {
          bb = read();
         } catch (IOException ex) {
@@ -50,7 +50,7 @@ public class Network extends SwingWorker{
         }
        message = ParseMessage.parseBytes(bb);
        message.get(0).compareTo("8");
-        
+        */
         return true;
     }
     
@@ -79,7 +79,9 @@ public class Network extends SwingWorker{
     }
     
     public void write(ByteBuffer bb) throws IOException {
-
+        
+        
+        
         System.out.println("WRITE: ");
 
         
@@ -94,7 +96,9 @@ public class Network extends SwingWorker{
     }
     
     public ByteBuffer read() throws IOException {
-		
+	
+      //  while (!serverKey.isReadable());
+        
         System.out.print("READ: ");
 
         int bytes = 0;
