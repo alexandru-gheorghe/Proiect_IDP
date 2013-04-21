@@ -42,7 +42,7 @@ public class Network extends SwingWorker{
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        /*
+       
         try {
          bb = read();
         } catch (IOException ex) {
@@ -51,12 +51,9 @@ public class Network extends SwingWorker{
        message = ParseMessage.parseBytes(bb);
        System.out.println("Login reply " + message.get(0));
        message.get(0).compareTo("8");
-<<<<<<< HEAD
-        */
+
         return true;
-=======
-       return true;
->>>>>>> 797d78a65e6ddb4c74b15a838c7280405a16b8fa
+
     }
     
      public ArrayList<String> sendOfferRequest(String userName, String servName) {
@@ -73,6 +70,7 @@ public class Network extends SwingWorker{
          }
          return null;
      }
+     
      public ArrayList<String> sendOfferService(String userName, String servName) {
          try {
              ArrayList<String> message = new ArrayList<>();
