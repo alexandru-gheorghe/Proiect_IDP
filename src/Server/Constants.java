@@ -34,4 +34,6 @@ public class Constants {
     public static final int ACTSTATE        =    15;
     public static final int OFFACCOTHER     =    16;
     public static final int INVALACC        =    17;
+    public static final int READOP          =    18;
+    public static final int WRITEOP         =    19;
 }
