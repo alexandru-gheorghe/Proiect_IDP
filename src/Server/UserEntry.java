@@ -32,6 +32,9 @@ public class UserEntry {
         }        
         return false;
     }
+    boolean hasType(String type) {
+        return this.type.compareTo(type) == 0;
+    }
     boolean isProd() {
         return (type.compareTo(Constants.PROD) == 0);
     }

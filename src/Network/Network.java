@@ -68,6 +68,20 @@ public class Network extends SwingWorker{
          }
          return null;
      }
+     public ArrayList<String> sendOfferService(String userName, String servName) {
+         try {
+             ArrayList<String> message = new ArrayList<>();
+             message.add(Constants.OFFSERVICE + "");
+             message.add(servName);
+             write(ParseMessage.constructMessage(message));
+             ByteBuffer bb = read();
+             message = ParseMessage.parseBytes(bb);
+             return message;
+         } catch(Exception e) {
+             e.printStackTrace();
+         }
+         return null;
+     }
     
     public void startNetworkService() {
         //this.execute();

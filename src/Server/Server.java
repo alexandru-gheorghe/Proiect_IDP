@@ -7,9 +7,6 @@ import java.util.*;
 
 
 public class Server {
-	public static final int BUF_SIZE	= 4;
-	public static final String IP		= "127.0.0.1";
-	public static final int PORT		= 30000;
 	public static HashMap<SelectionKey, UserEntry> userEntryMap;
 	public static void accept(SelectionKey key) throws IOException {
 		
@@ -169,27 +166,27 @@ public class Server {
            return;
        String sn = message.get(0);
        ue.services.add(sn);
-       ArrayList<String> reply = getProd(sn);
+       ArrayList<String> reply = getGroup(sn, Constants.PROD);
        write(key, ParseMessage.constructMessage(reply));
-       notifyProd(Constants.OFFREQEUEST, ue.userName, sn);
+       notifyProd(Constants.OFFREQEUEST, ue.userName, sn, Constants.PROD);
     }
-    static ArrayList<String> getProd(String serviceName) {
+    static ArrayList<String> getGroup(String serviceName, String clientType) {
         Iterator it = userEntryMap.entrySet().iterator();
         ArrayList<String> prodList = new ArrayList<>();
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry)it.next();
             UserEntry ue = (UserEntry)pairs.getValue();
-            if(ue.isOfInterest(serviceName) && ue.isProd())
+            if(ue.isOfInterest(serviceName) && ue.hasType(clientType))
                 prodList.add(ue.userName);
         }
         return prodList;
     }
-    static void notifyProd(int type,String conName, String  serviceName) {
+    static void notifyProd(int type, String conName, String  serviceName, String clientType) {
         Iterator it = userEntryMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry)it.next();
             UserEntry ue = (UserEntry)pairs.getValue();
-            if(ue.isOfInterest(serviceName))
+            if(ue.isOfInterest(serviceName) && ue.hasType(clientType))
                 sendMessage(type, conName, serviceName, ue);
         }
     }
@@ -210,16 +207,18 @@ public class Server {
            return;
        String sn = message.get(0);
        ue.services.add(sn);
-       notifyProd(Constants.CANCELREQ, ue.userName, sn);  
+       notifyProd(Constants.CANCELREQ, ue.userName, sn, Constants.PROD);  
     }
     
-    static void offerService(SelectionKey key, ArrayList<String> message) {
+    static void offerService(SelectionKey key, ArrayList<String> message) throws Exception {
        UserEntry ue = userEntryMap.get(key);
        if(ue == null)
            return;
        String sn = message.get(0);
        ue.services.add(sn);
-       notifyProd(Constants.OFFSERVICE, ue.userName, sn);
+       ArrayList<String> reply = getGroup(sn, Constants.CON);
+       write(key, ParseMessage.constructMessage(reply));
+       notifyProd(Constants.OFFSERVICE, ue.userName, sn, Constants.CON);
     }
     static void offerAccept(SelectionKey key, ArrayList<String> message) {
         UserEntry ue = userEntryMap.get(key);
