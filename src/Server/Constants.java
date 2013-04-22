@@ -36,4 +36,6 @@ public class Constants {
     public static final int INVALACC        =    17;
     public static final int READOP          =    18;
     public static final int WRITEOP         =    19;
+    public static final int LOGOUT          =    20;
+    public static final int NORM            =    1000;
 }

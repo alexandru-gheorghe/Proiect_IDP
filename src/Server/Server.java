@@ -81,6 +81,8 @@ public class Server {
                     makeOffer(key, message);
                 if(type == Constants.OFFDROP)
                     dropOffer(key, message);
+                if(type == Constants.LOGOUT)
+                    logout(key);
 	}
 	public static void write(SelectionKey key, ByteBuffer buf) throws IOException {
 		
@@ -175,6 +177,18 @@ public class Server {
             e.printStackTrace();
         }
         
+    }
+    
+    public static void logout(SelectionKey key) throws Exception{
+        UserEntry ue = userEntryMap.get(key);
+        for(int i = 0; i < ue.services.size(); i++) {
+            userEntryMap.remove(key);
+            key.channel().close();
+            if(ue.type.compareTo(Constants.CON) == 0)
+                notifyProd(Constants.DROPREQ, ue.userName, ue.services.get(i), Constants.PROD);
+            else
+                notifyProd(Constants.DROPREQ, ue.userName, ue.services.get(i), Constants.CON);
+        }
     }
     static void offerRequest(SelectionKey key, ArrayList<String> message) throws Exception {
        UserEntry ue = userEntryMap.get(key);

@@ -2,6 +2,7 @@ package GUI_Package;
 
 
 import Mediator.Mediator;
+import Server.Constants;
 import com.sun.nio.sctp.SendFailedNotification;
 import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
@@ -66,7 +67,7 @@ public class ConServListModel extends ServListModel {
             public void actionPerformed(ActionEvent e) {
                 String inputValue = JOptionPane.showInputDialog("Quantaty for offer request:");
                 quantity = inputValue;
-                progressBar.setMaximum(Integer.parseInt(quantity));
+                progressBar.setMaximum(Integer.parseInt(quantity) / Constants.NORM);
                 if(med.ConsActivateService(servName.getText()))
                     changeState(ServListModel.activState);
                     med.sendOfferRequest(med.getUserName(), servName.getText());

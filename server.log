@@ -1,0 +1,6 @@
+INFO - offerService : from:prod1; Service:Ciment
+INFO - offerService : from:prod1; Service:PC
+INFO - offerService : from:prod1; Service:Telefoane
+INFO - offerService : from:prod1; Service:Roti
+INFO - offerRequest : from:consumator.txt; Prod:Ciment
+INFO - offerAccept : from:consumator.txt; Service:Ciment; to:prod1; Quant:20000

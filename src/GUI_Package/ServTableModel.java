@@ -93,9 +93,10 @@ public class ServTableModel extends DefaultTableModel {
        return true;
    }
    public void setProgress(String servName, int quant) {
+   
        for(int i = 0; i < serviceList.size(); i++)
            if(serviceList.get(i).isSameService(servName))
-               serviceList.get(i).progressBar.setMaximum(quant);
+               serviceList.get(i).progressBar.setMaximum(quant / Constants.NORM);
    }
    public void updateProgress(String servName, int progress) {
        for(int i = 0; i < serviceList.size(); i++)

@@ -137,6 +137,8 @@ public class FileTransferer extends SwingWorker{
             bb.clear();
             int totalBytes = 0;
             int bytes;
+            int prog = 0;
+            int progress = 0;
             while((bytes = rbc.read(bb)) > 0) {
                 bb.flip();
                 totalBytes += bytes;
@@ -144,9 +146,17 @@ public class FileTransferer extends SwingWorker{
                 if(totalBytes >= quant)
                     break;
                 bb.clear();
-                Thread.sleep(500);
-                med.updateProgress(servName, totalBytes);
+                //Thread.sleep(500);
+                prog += bytes;
+                if(prog >= Constants.NORM) {
+                    progress ++;
+                    prog = 0;
+                    med.updateProgress(servName, progress);
+                }
             }
+            progress ++;
+            med.updateProgress(servName, progress);
+
             System.out.println("Write == " + totalBytes);
             rbc.close();
             //socketChannel.close();
@@ -162,21 +172,27 @@ public class FileTransferer extends SwingWorker{
             bb.clear();
             int totalBytes = 0;
             int bytes;
-         
+            int progress = 0;
+            int prog = 0;
             while((bytes = this.socketChannel.read(bb)) >= 0) {
-                
+            
                 bb.flip();
                 if(bytes > 0)
                     rbc.write(bb);
                 totalBytes += bytes;
+                prog += bytes;
                 if(totalBytes >= quant)
                     break;
                 bb.clear();
-                if(bytes > 0) {
-                    Thread.sleep(500);
-                    med.updateProgress(servName, totalBytes);
+                if(bytes > 0 && prog >= Constants.NORM) {
+                    //Thread.sleep(500);
+                    progress ++;
+                    prog = 0;
+                    med.updateProgress(servName, progress);
                 }
             }
+            progress ++;
+            med.updateProgress(servName, progress);
             System.out.println("Read == " + totalBytes);
             rbc.close();
             socketChannel.close();

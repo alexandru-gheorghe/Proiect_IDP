@@ -55,6 +55,16 @@ public class Network extends SwingWorker{
         return true;
 
     }
+    public boolean logout() {
+        ArrayList<String> message = new ArrayList<>();
+        message.add(Constants.LOGOUT + "");
+        try {
+            write(ParseMessage.constructMessage(message));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
     
      public void sendOfferRequest(String userName, String servName) {
          try {

@@ -146,7 +146,7 @@ public class Mediator {
    }
     public boolean logout() {
         logger.info("____Logged out____");
-        return clt.logout();
+        return network.logout();
     }
     public void getGroupOfInt() {
         clt.getGroupOfInt();
