@@ -4,25 +4,25 @@
  */
 package Server;
 import java.io.IOException;
-//import org.apache.log4j.*;
+import org.apache.log4j.*;
 
 /**
  *
  * @author Andrei
  */
-/*
+
 public class Logare {
-    static Logger logger = Logger.getLogger(Logare.class); 
+   
     
     public static Logger initLogger(String filename) {
         
         Logger logger = Logger.getLogger(Logare.class); 
-        PropertyConfigurator.configure(filename);
+        PropertyConfigurator.configure("log4j.properties");
         SimpleLayout layout = new SimpleLayout();    
         FileAppender appender;    
         
         try {
-            appender = new FileAppender(layout,"user1.log",false);
+            appender = new FileAppender(layout, filename,false);
             logger.addAppender(appender);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -33,4 +33,3 @@ public class Logare {
     
     
 }
-*/

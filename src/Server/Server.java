@@ -4,11 +4,14 @@ import java.nio.*;
 import java.nio.channels.*;
 import java.net.*;
 import java.util.*;
-
+import org.apache.log4j.*;
+import Server.Logare;
 
 public class Server {
 	public static HashMap<SelectionKey, UserEntry> userEntryMap;
         public static HashMap<String, String>   accServiceMap;
+        public static Logger logger;
+        
 	public static void accept(SelectionKey key) throws IOException {
 		
 		System.out.print("ACCEPT: ");
@@ -107,7 +110,8 @@ public class Server {
                 accServiceMap = new HashMap<>();
 		ServerSocketChannel serverSocketChannel	= null;
 		Selector selector						= null;
-		
+		logger = Logare.initLogger("server.log");
+                
 		try {
 			selector = Selector.open();
 			
@@ -185,6 +189,8 @@ public class Server {
        }
        write(key, ParseMessage.constructMessage(reply));
        notifyProd(Constants.OFFREQEUEST, ue.userName, sn, Constants.PROD);
+       
+        logger.info("offerRequest : from:" + ue.userName + "; Prod:" + sn);
     }
     static ArrayList<String> getGroup(String serviceName, String clientType) {
         Iterator it = userEntryMap.entrySet().iterator();
@@ -240,6 +246,8 @@ public class Server {
        }
        write(key, ParseMessage.constructMessage(reply));
        notifyProd(Constants.OFFSERVICE, ue.userName, sn, Constants.CON);
+       
+       logger.info("offerService : from:" + ue.userName + "; Service:" + sn);
     }
     static void offerAccept(SelectionKey key, ArrayList<String> message) throws Exception {
         UserEntry ue = userEntryMap.get(key);
@@ -274,6 +282,7 @@ public class Server {
         }
         accServiceMap.put(ue.userName + serviceName, winName);
         
+        logger.info("offerAccept : from:" + ue.userName + "; Service:" + serviceName + "; to:" + winName + "; Quant:" + quant);
     }
     static void dropRequest(SelectionKey key, ArrayList<String> message) {
         UserEntry ue = userEntryMap.get(key);
@@ -281,13 +290,18 @@ public class Server {
             return;
         String sn = message.get(0);
         notifyProd(Constants.DROPREQ, ue.userName, sn, Constants.PROD);
+        
+        logger.info("dropRequest : from:" + ue.userName + "; Service:" + sn);
     }
     static void offerExceed(ArrayList<String> message) {
         
     }
+    
     static void offerRefused(SelectionKey key, ArrayList<String> message) throws Exception{
         UserEntry ue = userEntryMap.get(key);
         notifyUser(Constants.OFFREFUSED, message.get(1), message.get(0), ue.userName, "");
+        
+        logger.info("dropRequest : from:" + ue.userName + "; For:" + message.get(1) + "; Service:" + message.get(0));
     }
 
     private static void makeOffer(SelectionKey key, ArrayList<String> message) throws Exception{
@@ -329,7 +343,10 @@ public class Server {
 
         }
         notifyUser(Constants.OFFMAKE, user, sn, ue.userName, price + "");
+        
+        logger.info("makeOffer : from:" + ue.userName + "; To:" + user + "; Service:" + sn + "; Price:" + price);
     }
+    
     public static void notifyUser(int action, String userName, String servName, String userProd, String price) throws Exception{
         Iterator it = userEntryMap.entrySet().iterator();
         System.out.println("Notify User" + userName + servName + price);
@@ -351,5 +368,7 @@ public class Server {
         UserEntry ue = userEntryMap.get(key);
         ue.setState(message.get(0) + message.get(1), Constants.EXSTATE);
         notifyUser(Constants.OFFDROP, message.get(1), message.get(0), ue.userName, "");
+        
+        logger.info("dropOffer : from:" + ue.userName + "; To:" + message.get(1) + "; Service:" + message.get(0));
     }
 }
